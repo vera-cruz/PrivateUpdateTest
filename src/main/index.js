@@ -1,5 +1,4 @@
-import { app, BrowserWindow } from 'electron'
-
+import { app, BrowserWindow, dialog } from 'electron'
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -52,7 +51,7 @@ app.on('activate', () => {
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
  */
 
-/**
+
 import { autoUpdater } from 'electron-updater'
 
 autoUpdater.on('update-downloaded', () => {
@@ -60,14 +59,19 @@ autoUpdater.on('update-downloaded', () => {
 })
 
 app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
+  //if (process.env.NODE_ENV === 'production')
+  //autoUpdater.checkForUpdates()
+  autoUpdater.checkForUpdatesAndNotify()
 })
-*/
+
+
+/*
 const autoUpdater = require("electron-auto-updater").autoUpdater;
 
 const log = require("electron-log");
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = "info";
+autoUpdater.logger.transports.file.file = __dirname + 'log.log';
 
 autoUpdater.addListener("update-available", function(event) {
   log.info("update-available");
@@ -79,6 +83,25 @@ autoUpdater.addListener("update-downloaded", function(
   releaseDate,
   updateURL
 ) {
+  let message = app.getName() + ' ' + releaseName;
+  if (releaseNotes) {
+      const splitNotes = releaseNotes.split(/[^\r]\n/);
+      message += '\n\nリリース内容:\n';
+      splitNotes.forEach(notes => {
+          message += notes + '\n\n';
+      });
+  }
+  dialog.showMessageBox({
+      type: 'question',
+      buttons: ['再起動', 'あとで'],
+      defaultId: 0,
+      message: '新しいバージョンをダウンロードしました。再起動しますか？',
+      detail: message
+  }, response => {
+      if (response === 0) {
+          setTimeout(() => autoUpdater.quitAndInstall(), 1);
+      }
+  });
   log.info("update-downloaded" + releaseName);
   autoUpdater.quitAndInstall();
   return true;
@@ -94,3 +117,4 @@ autoUpdater.addListener("update-not-available", function() {
 });
 
 autoUpdater.checkForUpdates();
+*/

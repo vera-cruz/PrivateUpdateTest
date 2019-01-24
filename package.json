@@ -1,7 +1,7 @@
 {
   "name": "updater-check",
-  "version": "0.2.0",
-  "author": "dev <dev@iot-system.com>",
+  "version": "0.3.3",
+  "author": "dev <dev@example.com>",
   "description": "An electron-vue project",
   "license": null,
   "main": "./dist/electron/main.js",
@@ -52,9 +52,11 @@
     "win": {
       "target": "nsis",
       "icon": "build/icons/icon.ico",
-      "publish": [{
-        "provider": "github"
-      }]
+      "publish": [
+        {
+          "provider": "github"
+        }
+      ]
     },
     "linux": {
       "icon": "build/icons"
@@ -64,6 +66,7 @@
     "axios": "^0.18.0",
     "electron-auto-updater": "^1.0.0",
     "electron-log": "^2.2.17",
+    "electron-updater": "^4.0.6",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",

@@ -12,6 +12,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 
 let webConfig = {
+  mode: 'production',
   devtool: '#cheap-module-eval-source-map',
   entry: {
     web: path.join(__dirname, '../src/renderer/main.js')
