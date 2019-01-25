@@ -1,0 +1,58 @@
+{
+  "name": "vue3",
+  "version": "4.0.3",
+  "private": false,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "electron:build": "vue-cli-service electron:build",
+    "electron:serve": "vue-cli-service electron:serve",
+    "postinstall": "electron-builder install-app-deps",
+    "publish:electron": "vue-cli-service build:electron --win -p always"
+  },
+  "dependencies": {
+    "vue": "^2.5.21",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.3.0",
+    "@vue/cli-service": "^3.3.0",
+    "electron": "^3.0.0",
+    "vue-cli-plugin-electron-builder": "^1.0.0-rc.10",
+    "vue-template-compiler": "^2.5.21"
+  },
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "vera-cruz",
+      "repo": "PrivateUpdateTest",
+      "private": false
+    }
+  ],
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vera-cruz/PrivateUpdateTest.git"
+  },
+  "win": {
+      "target": "nsis",
+      "publish": [
+        {
+          "provider": "github",
+          "owner": "vera-cruz",
+          "repo": "PrivateUpdateTest",
+          "private": false
+        }
+      ]
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "main": "background.js"
+}

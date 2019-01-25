@@ -24,6 +24,9 @@
           <button class="alt" @click="open('https://electron.atom.io/docs/')">Electron</button>
           <button class="alt" @click="open('https://vuejs.org/v2/guide/')">Vue.js</button>
         </div>
+        <div class="log">
+          {{ log }}
+        </div>
       </div>
     </main>
   </div>
@@ -32,19 +35,26 @@
 <script>
   import SystemInformation from './LandingPage/SystemInformation'
   const appVersion = require('../../../package.json').version;
+  const {ipcRenderer} = require('electron');
 
   export default {
     name: 'landing-page',
     components: { SystemInformation },
     data(){
       return {
-        apv: appVersion
+        apv: appVersion,
+        log: ""
       }
     },
     methods: {
       open (link) {
         this.$electron.shell.openExternal(link)
       }
+    },
+    mounted(){
+      ipcRenderer.on('message', function(event, text) {
+        this.log += text
+      })
     }
   }
 </script>
