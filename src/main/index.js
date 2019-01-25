@@ -1,4 +1,5 @@
 import { app, BrowserWindow, dialog } from 'electron'
+import { autoUpdater } from 'electron-updater'
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -23,6 +24,7 @@ function createWindow () {
   })
 
   mainWindow.loadURL(winURL)
+  autoUpdater.checkForUpdatesAndNotify();
 
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -52,8 +54,46 @@ app.on('activate', () => {
  */
 
 
-import { autoUpdater } from 'electron-updater'
 
+//iffy source
+let win;
+
+function sendStatusToWindow(text) {
+  log.info(text);
+  win.webContents.send('message', text);
+}
+function createDefaultWindow() {
+  win = new BrowserWindow();
+  win.webContents.openDevTools();
+  win.on('closed', () => {
+    win = null;
+  });
+  win.loadURL(`file://${__dirname}/version.html#v${app.getVersion()}`);
+  return win;
+}
+autoUpdater.on('checking-for-update', () => {
+  sendStatusToWindow('Checking for update...');
+})
+autoUpdater.on('update-available', (info) => {
+  sendStatusToWindow('Update available.');
+})
+autoUpdater.on('update-not-available', (info) => {
+  sendStatusToWindow('Update not available.');
+})
+autoUpdater.on('error', (err) => {
+  sendStatusToWindow('Error in auto-updater. ' + err);
+})
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  sendStatusToWindow(log_message);
+})
+autoUpdater.on('update-downloaded', (info) => {
+  sendStatusToWindow('Update downloaded');
+});
+
+/*
 autoUpdater.on('update-downloaded', () => {
   autoUpdater.quitAndInstall()
 })
@@ -63,7 +103,7 @@ app.on('ready', () => {
   //autoUpdater.checkForUpdates()
   autoUpdater.checkForUpdatesAndNotify()
 })
-
+*/
 
 /*
 const autoUpdater = require("electron-auto-updater").autoUpdater;
